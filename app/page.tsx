@@ -1,9 +1,10 @@
-import Image from "next/image";
+"use client"
+import CommentsList from "../components/CommentsList";
 
 export default function Home() {
   return (
-<div>
-  Live Comment board!
-</div>
- );
+    <div className="p-5">
+      <CommentsList />
+    </div>
+  );
 }
