@@ -1,0 +1,45 @@
+[
+  {
+    "$match": {
+      "operationType": { "$in": [ "insert", "update", "delete" ] }
+    }
+  },
+  {
+    "$set": {
+      "_ablyChannel": "live-comments",
+      "_ablyMsgName": {
+        "$switch": {
+          "branches": [
+            {
+              "case": { "$and": [
+                { "$eq": [ "$operationType", "insert" ] },
+                { "$ifNull": [ "$fullDocument.replyId", false ] }
+              ] },
+              "then": "reply_added"
+            },
+            {
+              "case": { "$eq": [ "$operationType", "insert" ] },
+              "then": "comment_added"
+            },
+            {
+              "case": { "$and": [
+                { "$eq": [ "$operationType", "update" ] },
+                { "$ifNull": [ "$fullDocument.replyId", false ] }
+              ] },
+              "then": "reply_updated"
+            },
+            {
+              "case": { "$eq": [ "$operationType", "update" ] },
+              "then": "comment_updated"
+            },
+            {
+              "case": { "$eq": [ "$operationType", "delete" ] },
+              "then": "comment_deleted"
+            }
+          ],
+          "default": "other"
+        }
+      }
+    }
+  }
+]
