@@ -7,10 +7,10 @@ interface CommentProps {
   comment: {
     id: string;
     text: string;
-    replies: { id: string; text: string; reactions: Record<string, number> }[];
+    replies: { commentId: string; replyId: string; text: string; reactions: Record<string, number> }[];
     reactions: Record<string, number>;
   };
-  onReply: (id: string, text: string) => void;
+  onReply: (commentId: string, text: string) => void;
   onReact: (id: string, emoji: string) => void;
   onReactToReply: (commentId: string, replyId: string, emoji: string) => void;
 }
@@ -25,12 +25,16 @@ const Comment: React.FC<CommentProps> = ({ comment, onReply, onReact, onReactToR
       <div className="flex gap-2 items-center">
         <p>{Object.entries(comment.reactions).map(([emoji, count]) => `${emoji}(${count}) `)}</p>
       </div>
-
       {/* Render Replies */}
-      {comment.replies.map((reply) => (
-        <Reply key={reply.id} reply={reply} onReact={(replyId, emoji) => onReactToReply(comment.id, replyId, emoji)} onReply={onReply} />
-      ))}
-
+      {[...comment.replies]
+        .sort((a, b) => (a.replyId > b.replyId ? 1 : -1))
+        .map((reply) => (
+          <Reply key={reply.replyId} reply={reply} onReact={(emoji) => {
+              onReactToReply(comment.id, reply.replyId, emoji);
+              console.log("onReactToReply called with:", { commentId: comment.id, replyId: reply.replyId, emoji });
+            }
+          } />
+        ))}
       {/* Reply Form */}
       <div className="p-3">
         <CommentForm onSubmit={(text) => onReply(comment.id, text)} />
