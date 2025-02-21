@@ -54,7 +54,12 @@ const CommentList = () => {
       <h2 className="text-xl font-bold">Live Comments</h2>
       <div className="mt-4">
         {comments.map((comment) => (
-          <Comment key={comment.id} comment={comment} onReply={replyToComment} onReact={reactToComment} onReactToReply={reactToReply} />
+          <Comment
+            key={comment.id}
+            comment={comment}
+            onReply={replyToComment}
+            onReact={reactToComment}
+            onReactToReply={reactToReply} />
         ))}
       </div>
       <CommentForm onSubmit={addComment} />
