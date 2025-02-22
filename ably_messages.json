@@ -1,0 +1,188 @@
+[{
+    "_id": {
+        "_data": "8267B9B54F000000092B042C0100296E5A1004AC35B0740F574C81A3B7C558A745CA1E463C6F7065726174696F6E54797065003C696E736572740046646F63756D656E744B65790046645F6964006467B9B54F6BE32B6786E25915000004"
+    },
+    "operationType": "insert",
+    "clusterTime": {
+        "$timestamp": {
+            "t": 1740223823,
+            "i": 9
+        }
+    },
+    "wallTime": {
+        "$date": {
+            "$numberLong": "1740223823183"
+        }
+    },
+    "fullDocument": {
+        "_id": {
+            "$oid": "67b9b54f6be32b6786e25915"
+        },
+        "text": "Hi!",
+        "reactions": {},
+        "replies": [],
+        "createdAt": {
+            "$date": {
+                "$numberLong": "1740223823143"
+            }
+        },
+        "updatedAt": {
+            "$date": {
+                "$numberLong": "1740223823143"
+            }
+        },
+        "__v": {
+            "$numberInt": "0"
+        }
+    },
+    "ns": {
+        "db": "test",
+        "coll": "comments"
+    },
+    "documentKey": {
+        "_id": {
+            "$oid": "67b9b54f6be32b6786e25915"
+        }
+    },
+    "_ablyChannel": "live-comments",
+    "_ablyMsgName": "comment_added"
+},
+  {
+    "_id": {
+        "_data": "8267B9B6080000001D2B042C0100296E5A1004AC35B0740F574C81A3B7C558A745CA1E463C6F7065726174696F6E54797065003C7570646174650046646F63756D656E744B65790046645F6964006467B9B54F6BE32B6786E25915000004"
+    },
+    "operationType": "update",
+    "clusterTime": {
+        "$timestamp": {
+            "t": 1740224008,
+            "i": 29
+        }
+    },
+    "wallTime": {
+        "$date": {
+            "$numberLong": "1740224008584"
+        }
+    },
+    "ns": {
+        "db": "test",
+        "coll": "comments"
+    },
+    "documentKey": {
+        "_id": {
+            "$oid": "67b9b54f6be32b6786e25915"
+        }
+    },
+    "updateDescription": {
+        "updatedFields": {
+            "updatedAt": {
+                "$date": {
+                    "$numberLong": "1740224008545"
+                }
+            },
+            "reactions.❤️": {
+                "$numberInt": "1"
+            }
+        },
+        "removedFields": [],
+        "truncatedArrays": []
+    },
+    "_ablyChannel": "live-comments",
+    "_ablyMsgName": "comment_updated"
+},
+{
+    "_id": {
+        "_data": "8267B9B6720000000E2B042C0100296E5A1004AC35B0740F574C81A3B7C558A745CA1E463C6F7065726174696F6E54797065003C7570646174650046646F63756D656E744B65790046645F6964006467B9B54F6BE32B6786E25915000004"
+    },
+    "operationType": "update",
+    "clusterTime": {
+        "$timestamp": {
+            "t": 1740224114,
+            "i": 14
+        }
+    },
+    "wallTime": {
+        "$date": {
+            "$numberLong": "1740224114286"
+        }
+    },
+    "ns": {
+        "db": "test",
+        "coll": "comments"
+    },
+    "documentKey": {
+        "_id": {
+            "$oid": "67b9b54f6be32b6786e25915"
+        }
+    },
+    "updateDescription": {
+        "updatedFields": {
+            "replies": [
+                {
+                    "text": "New reply!",
+                    "reactions": {},
+                    "_id": {
+                        "$oid": "67b9b6726be32b6786e25918"
+                    },
+                    "createdAt": {
+                        "$date": {
+                            "$numberLong": "1740224114250"
+                        }
+                    },
+                    "replyId": "67b9b6726be32b6786e25918"
+                }
+            ],
+            "updatedAt": {
+                "$date": {
+                    "$numberLong": "1740224114250"
+                }
+            }
+        },
+        "removedFields": [],
+        "truncatedArrays": []
+    },
+    "_ablyChannel": "live-comments",
+    "_ablyMsgName": "comment_updated"
+},
+{
+    "_id": {
+        "_data": "8267B9B6910000001C2B042C0100296E5A1004AC35B0740F574C81A3B7C558A745CA1E463C6F7065726174696F6E54797065003C7570646174650046646F63756D656E744B65790046645F6964006467B90CBC818B8895E73F87C9000004"
+    },
+    "operationType": "update",
+    "clusterTime": {
+        "$timestamp": {
+            "t": 1740224145,
+            "i": 28
+        }
+    },
+    "wallTime": {
+        "$date": {
+            "$numberLong": "1740224145956"
+        }
+    },
+    "ns": {
+        "db": "test",
+        "coll": "comments"
+    },
+    "documentKey": {
+        "_id": {
+            "$oid": "67b90cbc818b8895e73f87c9"
+        }
+    },
+    "updateDescription": {
+        "updatedFields": {
+            "updatedAt": {
+                "$date": {
+                    "$numberLong": "1740224145916"
+                }
+            },
+            "replies.2.reactions.😂": {
+                "$numberInt": "1"
+            }
+        },
+        "removedFields": [],
+        "truncatedArrays": []
+    },
+    "_ablyChannel": "live-comments",
+    "_ablyMsgName": "comment_updated"
+}
+]

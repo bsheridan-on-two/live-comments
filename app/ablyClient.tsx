@@ -13,7 +13,8 @@ const AblyClient: React.FC<AblyClientProps> = ({ children }) => {
   console.log(process.env.ABLY_API_KEY);
   const client = new Ably.Realtime({
          authUrl: 'api/ably/authenticate',
-         logLevel: 2
+         autoConnect: typeof window !== 'undefined',
+        //  logLevel: 2
       });
       
   client.connection.on((stateChange) => {

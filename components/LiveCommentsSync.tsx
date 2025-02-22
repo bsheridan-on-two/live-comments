@@ -21,34 +21,56 @@ function decodeFullDocument(fullDoc: any): CommentData {
   };
 }
 
-// Helper to merge updated fields into an existing comment
-// Note: This is a shallow merge. For nested fields (like replies),
- // you might need a deeper merge strategy.
-function mergeUpdate(existing: CommentData, updatedFields: any): CommentData {
-  // If updatedFields contains a top-level field, we override it.
-  return {
-    ...existing,
-    ...updatedFields,
-    // For updated replies, if a key like "replies.X" is provided,
-    // you can parse the index and replace that reply in the replies array.
-    // This example does a simple string match.
-    replies: existing.replies.map((reply) => {
-      // Look for a field update key beginning with "replies."
-      // If one exists whose key ends with the reply's index (or id match), replace it.
-      // You could improve this logic as needed.
-      for (const key in updatedFields) {
-        if (key.startsWith("replies.")) {
-          // For example, if key is "replies.1", check if reply.replyId matches
-          // For simplicity, if replyId equals the updated reply's _id in updatedFields
-          const updatedReply = updatedFields[key];
-          if (updatedReply && (reply.replyId === (updatedReply._id?.$oid || updatedReply._id))) {
-            return { ...reply, ...updatedReply };
+// Helper to merge updatedFields into an existing comment.
+// This function handles top-level fields, reactions (keys like "reactions.❤️"),
+// and nested updates for replies (e.g. "replies.2.reactions.😂").
+function mergeCommentUpdate(current: CommentData, updatedFields: any): CommentData {
+  const updated: CommentData = { ...current };
+  console.log("UpdatedFields: ", updatedFields);
+
+  for (const key in updatedFields) {
+    
+    // New reaction to the comment
+    if (key.startsWith("reactions.")) {
+      const emoji = key.split(".")[1];
+      updated.reactions = { ...updated.reactions, [emoji]: updatedFields[key].$numberInt };
+      
+    } else if (key.startsWith("replies.")) {
+      const parts = key.split(".")
+      
+      // New repy to the comment, e.g. replies.2
+      if (parts.length == 2) {
+        updated.replies = [
+          ...current.replies,
+          {
+            commentId: current.id,
+            text: updatedFields[key].text,
+            replyId: updatedFields[key].replyId,
+            reactions: updatedFields[key].reactions || {}
           }
+        ]
+      }
+
+      // New reaction to a reply, e.g. replies.2.reactions.😂
+      if (parts.length === 4 && parts[2] === "reactions") {
+        const index = parseInt(parts[1], 10);
+        const emoji = parts[3];
+        const emojiInc = updatedFields[key].$numberInt;
+        updated.replies = [...current.replies];
+        if (updated.replies[index]) {
+          updated.replies[index] = {
+            ...updated.replies[index],
+            reactions: {
+              ...updated.replies[index].reactions,
+              [emoji]: emojiInc,
+            },
+          };
         }
       }
-      return reply;
-    }),
-  };
+    }
+   }
+   
+  return updated;
 }
 
 const LiveCommentsSync: React.FC = () => {
@@ -65,7 +87,7 @@ const LiveCommentsSync: React.FC = () => {
     );
   }, []);
 
-  // Initial fetch with transformation
+  // Fetch initial comments with transformation
   useEffect(() => {
     const fetchComments = async () => {
       try {
@@ -84,61 +106,37 @@ const LiveCommentsSync: React.FC = () => {
     fetchComments();
   }, []);
 
-  // Ably channel subscription – decode messages based on _ablyMsgName
-  useChannel("live-comments", (message) => {
-    console.log("Received Ably message:", message.data);
-    const msg = message.data;
-    const msgName = msg._ablyMsgName;
-    if (!msgName) return;
-
-    // For comment_added, use fullDocument directly
-    if (msgName === "comment_added" && msg.fullDocument) {
-      const newComment = decodeFullDocument(msg.fullDocument);
+  // Ably subscription for new comments
+  useChannel("live-comments", "comment_added", (message) => {
+    console.log("Received Ably message (comment_added):", message.data);
+    if (message.data.fullDocument) {
+      const newComment = decodeFullDocument(message.data.fullDocument);
       setComments((prev) => [...prev, newComment]);
-      return;
     }
+  });
 
-    // For updates, fullDocument may not exist.
-    if (msgName === "comment_updated") {
-      if (msg.fullDocument) {
-        // Use fullDocument if available
-        const updatedComment = decodeFullDocument(msg.fullDocument);
-        updateComment(updatedComment);
-      } else if (msg.updateDescription && msg.documentKey && msg.documentKey._id) {
-        // Otherwise, try merging updatedFields into the existing comment
-        setComments((prev) =>
-          prev.map((c) => {
-            if (c.id === (msg.documentKey._id.$oid || msg.documentKey._id)) {
-              return mergeUpdate(c, msg.updateDescription.updatedFields);
-            }
-            return c;
-          })
-        );
-      }
-      return;
+  // Ably subscription for comment updates (which may include reactions or reply changes)
+  useChannel("live-comments", "comment_updated", (message) => {
+    console.log("Received Ably message (comment_updated):", message.data);
+    const commentId = message.data.documentKey?._id?.$oid;
+    setComments((prev) =>
+        prev.map((c) => {
+          if (c.id === commentId) {
+            return mergeCommentUpdate(c, message.data.updateDescription.updatedFields);
+          }
+          return c;
+        })
+      );
     }
-    if (msgName === "comment_deleted") {
-      setComments((prev) => prev.filter((c) => c.id !== (msg.documentKey._id.$oid || msg.documentKey._id)));
-      return;
+  );
+
+  // Ably subscription for comment deletion, if needed.
+  useChannel("live-comments", "comment_deleted", (message) => {
+    console.log("Received Ably message (comment_deleted):", message.data);
+    const commentId = message.data.documentKey?._id?.$oid || message.data.documentKey?._id;
+    if (commentId) {
+      setComments((prev) => prev.filter((c) => c.id !== commentId));
     }
-    if (msgName === "reply_added" || msgName === "reply_updated") {
-      // We assume the full comment document is sent, or at least an update.
-      if (msg.fullDocument) {
-        const updatedComment = decodeFullDocument(msg.fullDocument);
-        updateComment(updatedComment);
-      } else if (msg.updateDescription && msg.documentKey && msg.documentKey._id) {
-        setComments((prev) =>
-          prev.map((c) => {
-            if (c.id === (msg.documentKey._id.$oid || msg.documentKey._id)) {
-              return mergeUpdate(c, msg.updateDescription.updatedFields);
-            }
-            return c;
-          })
-        );
-      }
-      return;
-    }
-    console.warn("Unknown message name:", msgName);
   });
 
   return <CommentsList comments={comments} />;

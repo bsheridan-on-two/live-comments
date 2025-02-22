@@ -3,6 +3,7 @@ import mongoose, { Schema, model, models, Document } from 'mongoose';
 interface Reply {
   replyId: string; // Added replyId field
   text: string;
+  commentId: string;
   reactions: Record<string, number>;
 }
 
