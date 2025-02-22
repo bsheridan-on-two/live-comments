@@ -39,7 +39,7 @@ function mergeCommentUpdate(current: CommentData, updatedFields: any): CommentDa
       const parts = key.split(".")
       
       // New repy to the comment, e.g. replies.2
-      if (parts.length == 2) {
+      if (parts.length === 2) {
         updated.replies = [
           ...current.replies,
           {

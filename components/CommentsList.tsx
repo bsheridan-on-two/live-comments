@@ -73,18 +73,21 @@ const CommentsList: React.FC<CommentsListProps> = ({ comments }) => {
   return (
     <div className="font-mono">
       <h2 className="text-xl font-bold">Live Comments</h2>
-      {comments.map((comment) => (
-        <Comment
-          key={comment.id}
-          comment={comment}
-          onReply={replyToComment}
-          onReact={reactToComment}
-          onReactToReply={reactToReply}
-        />
-      ))}
-      <CommentForm onSubmit={addComment} />
+      {comments
+        .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+        .map((comment) => (
+          <Comment
+            key={comment.id}
+            comment={comment}
+            onReply={replyToComment}
+            onReact={reactToComment}
+            onReactToReply={reactToReply}
+          />
+        ))}
+      <div className="fixed bottom-0 left-0 right-0 bg-white border-t p-4">
+        <CommentForm onSubmit={addComment} />
+      </div>
     </div>
   );
-};
-
+}
 export default CommentsList;
