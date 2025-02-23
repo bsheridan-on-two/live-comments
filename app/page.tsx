@@ -1,5 +1,5 @@
 "use client"
-import LiveCommentsSync from "@/components/LiveCommentsSync";
+import SubscribeToUpdates from "../components/SubscribeToUpdates";
 import CommentsList from "../components/CommentsList";
 import { ChannelProvider } from "ably/react";
 import dynamic from 'next/dynamic';
@@ -13,7 +13,7 @@ export default function Home() {
     <div className="p-5">
       <AblyClient>
         <ChannelProvider channelName="live-comments">
-         <LiveCommentsSync />
+         <SubscribeToUpdates />
         </ChannelProvider>
        </AblyClient>
     </div>
