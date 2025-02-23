@@ -2,6 +2,9 @@
 
 /venv
 openai.sh
+.tfvars
+/terraform/.terraform
+/terraform/.terraform.lock.hcl
 
 # dependencies
 /node_modules
