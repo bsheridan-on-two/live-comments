@@ -1,9 +1,9 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import * as Ably from "ably";
 
 const CLIENT_IDS = ["Alpha", "Bravo", "Charlie", "Delta", "Echo", "Foxtrot"];
 const getRandomClientId = (): string => {
-  let r = (Math.random() + 1).toString(36).substring(7);
+  const r = (Math.random() + 1).toString(36).substring(7);
   return CLIENT_IDS[Math.floor(Math.random() * CLIENT_IDS.length)] + '_' + r;
 };
 

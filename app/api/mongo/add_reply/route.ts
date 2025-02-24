@@ -20,7 +20,13 @@ export async function POST(req: Request) {
     // Assume the new reply is the last in the replies array
     const newReply = updatedComment.replies[updatedComment.replies.length - 1];
     return NextResponse.json({ success: true, data: { id: commentId, replyId: newReply.replyId } });
-  } catch (error: any) {
-    return NextResponse.json({ success: false, message: error.message || 'Server Error' }, { status: 500 });
-  }
+    
+  } catch (error: unknown) {
+    let errorMessage = 'Server Error';
+    
+    if (error instanceof Error) {
+      errorMessage = error.message;
+    }
+
+    return NextResponse.json({ success: false, message: errorMessage }, { status: 500 }); }
 }

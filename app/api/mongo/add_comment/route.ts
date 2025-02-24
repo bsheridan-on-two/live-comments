@@ -11,7 +11,14 @@ export async function POST(req: Request) {
     }
     const comment = await Comment.create({ text });
     return NextResponse.json({ success: true, data: { id: comment._id } });
-  } catch (error: any) {
-    return NextResponse.json({ success: false, message: error.message || 'Server Error' }, { status: 500 });
-  }
+    }
+  catch (error: unknown) {
+    let errorMessage = 'Server Error';
+    
+    if (error instanceof Error) {
+      errorMessage = error.message;
+    }
+
+    return NextResponse.json({ success: false, message: errorMessage }, { status: 500 }); 
+   }
 }

@@ -1,6 +1,6 @@
 import mongoose, { Schema, model, models, Document } from 'mongoose';
 
-interface Reply {
+interface Reply extends Document {
   replyId: string; // Added replyId field
   text: string;
   commentId: string;

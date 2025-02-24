@@ -1,4 +1,3 @@
-import { useState } from "react";
 import Reply from "./Reply";
 import Reaction from "./Reaction";
 import CommentForm from "./CommentForm";

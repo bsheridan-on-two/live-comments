@@ -29,8 +29,13 @@ const CommentsList: React.FC<CommentsListProps> = ({ comments }) => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ text }),
       });
-    } catch (error: any) {
-      console.error("Failed to add comment:", error.message);
+    } catch (error: unknown) {
+      let errorMessage = 'Server Error';
+    
+      if (error instanceof Error) {
+        errorMessage = error.message;
+      }
+       console.error("Failed to add comment:", errorMessage);
     }
   };
 
@@ -41,8 +46,14 @@ const CommentsList: React.FC<CommentsListProps> = ({ comments }) => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ commentId, text }),
       });
-    } catch (error: any) {
-      console.error("Failed to add reply:", error.message);
+    } catch (error: unknown) {
+      let errorMessage = 'Server Error';
+    
+      if (error instanceof Error) {
+        errorMessage = error.message;
+      }
+      
+      console.error("Failed to add reply:", errorMessage);
     }
   };
 
@@ -53,8 +64,14 @@ const CommentsList: React.FC<CommentsListProps> = ({ comments }) => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ commentId, emoji }),
       });
-    } catch (error: any) {
-      console.error("Failed to add reaction to comment:", error.message);
+    } catch (error: unknown) {
+      let errorMessage = 'Server Error';
+    
+      if (error instanceof Error) {
+        errorMessage = error.message;
+      }
+
+      console.error("Failed to add reaction to comment:", errorMessage);
     }
   };
 
@@ -65,8 +82,14 @@ const CommentsList: React.FC<CommentsListProps> = ({ comments }) => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ commentId, emoji, replyId }),
       });
-    } catch (error: any) {
-      console.error("Failed to add reaction to reply:", error.message);
+    } catch (error: unknown) {
+      let errorMessage = 'Server Error';
+    
+      if (error instanceof Error) {
+        errorMessage = error.message;
+      }
+
+      console.error("Failed to add reaction to reply:", errorMessage);
     }
   };
 

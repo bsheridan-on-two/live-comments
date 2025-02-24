@@ -1,6 +1,5 @@
 "use client"
 import SubscribeToUpdates from "../components/SubscribeToUpdates";
-import CommentsList from "../components/CommentsList";
 import { ChannelProvider } from "ably/react";
 import dynamic from 'next/dynamic';
 
