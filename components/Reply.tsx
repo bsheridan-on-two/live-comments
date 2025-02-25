@@ -10,12 +10,7 @@ const Reply: React.FC<ReplyProps> = ({ reply, onReact }) => {
     <div className="ml-6 border-l-2 pl-4 mt-2 font-mono">
       <div className="flex justify-between items-center">
         <p>{reply.text}</p>
-        <Reaction onReact={(emoji) => {
-            // Pass the received emoji directly without adding reply.commentId
-            onReact(emoji);
-            console.log("Reaction callback, emoji:", emoji);
-          }}
-        />
+        <Reaction onReact={(emoji) => {onReact(emoji);} } />
       </div>
       <p>
         {Object.entries(reply.reactions).map(([emoji, count]) => (

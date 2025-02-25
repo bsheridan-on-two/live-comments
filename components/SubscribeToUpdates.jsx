@@ -26,7 +26,6 @@ function decodeFullDocument(fullDoc) {
 // and nested updates for replies (e.g. "replies.2.reactions.😂").
 function mergeCommentUpdate(current, updatedFields) {
   const updated = { ...current };
-  console.log("UpdatedFields: ", updatedFields);
 
   for (const key in updatedFields) {
     
@@ -92,7 +91,6 @@ const SubscribeToUpdates = () => {
   // Utility: update a comment in state by id
   const updateComment = useCallback((updated) => {
     if (!updated || !updated.id) {
-      console.error("updateComment received an invalid object:", updated);
       return;
     }
     setComments((prev) =>
@@ -121,7 +119,6 @@ const SubscribeToUpdates = () => {
 
   // Ably subscription for new comments
   useChannel("live-comments", "comment_added", (message) => {
-    console.log("Received Ably message (comment_added):", message.data);
     if (message.data.fullDocument) {
       const newComment = decodeFullDocument(message.data.fullDocument);
       setComments((prev) => [...prev, newComment]);
@@ -130,7 +127,6 @@ const SubscribeToUpdates = () => {
 
   // Ably subscription for comment updates (which may include reactions or reply changes)
   useChannel("live-comments", "comment_updated", (message) => {
-    console.log("Received Ably message (comment_updated):", message.data);
     const commentId = message.data.documentKey?._id?.$oid;
     setComments((prev) =>
         prev.map((c) => {
@@ -145,8 +141,7 @@ const SubscribeToUpdates = () => {
 
   // Ably subscription for comment deletion, if needed.
   useChannel("live-comments", "comment_deleted", (message) => {
-    console.log("Received Ably message (comment_deleted):", message.data);
-    const commentId = message.data.documentKey?._id?.$oid || message.data.documentKey?._id;
+    const commentId = message.data.documentKey?._id?.$oid;
     if (commentId) {
       setComments((prev) => prev.filter((c) => c.id !== commentId));
     }

@@ -30,7 +30,6 @@ const Comment: React.FC<CommentProps> = ({ comment, onReply, onReact, onReactToR
         .map((reply) => (
           <Reply key={reply.replyId} reply={reply} onReact={(emoji) => {
               onReactToReply(comment.id, reply.replyId, emoji);
-              console.log("onReactToReply called with:", { commentId: comment.id, replyId: reply.replyId, emoji });
             }
           } />
         ))}
