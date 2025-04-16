@@ -1,19 +1,22 @@
-"use client"
+
+import { fetchCommentData } from "@/lib/fetchCommentData";
 import SubscribeToUpdates from "../components/SubscribeToUpdates";
-import { ChannelProvider } from "ably/react";
 import dynamic from 'next/dynamic';
+import ChannelProviderWrapper from "@/components/ChannelWrapper";
 
 const AblyClient = dynamic(() => import('./ablyClient'), {
   ssr: false,
 })
 
-export default function Home() {
+export default async function Home() {
+  const comments = await fetchCommentData()
+
   return (
     <div className="p-5">
       <AblyClient>
-        <ChannelProvider channelName="live-comments">
-         <SubscribeToUpdates />
-        </ChannelProvider>
+        <ChannelProviderWrapper channelName="live-comments">
+         <SubscribeToUpdates initialComments={comments} />
+        </ChannelProviderWrapper>
        </AblyClient>
     </div>
   );

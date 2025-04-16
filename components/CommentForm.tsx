@@ -19,7 +19,7 @@ const CommentForm: React.FC<CommentFormProps> = ({ onSubmit }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex gap-2 font-mono">
+    <form onSubmit={handleSubmit} className="flex gap-2 font-mono text-black">
       <input
         type="text"
         value={input}
