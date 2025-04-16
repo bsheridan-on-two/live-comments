@@ -6,7 +6,7 @@ import fs from "fs";
 import path from "path";
 
 export const saveCommentServerAction = async (comment: CommentData) => {
-    const filePath = process.env.COMMENTS_FILE_PATH || path.join(__dirname, 'comments.json');
+    const filePath = "c:/VS Code/live-comments/lib/comments.json";
     const comments = JSON.parse(fs.readFileSync(filePath, 'utf8') || '[]');
     comments.push(comment);
     fs.writeFileSync(filePath, JSON.stringify(comments, null, 2));

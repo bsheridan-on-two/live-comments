@@ -1,22 +1,15 @@
 [
   {
     "id": "temp-id",
-    "text": "test",
-    "createdAt": "2025-04-16T14:12:25.456Z",
+    "text": "Test comment",
+    "createdAt": "2025-04-16T16:41:37.255Z",
     "replies": [],
     "reactions": {}
   },
   {
     "id": "temp-id",
-    "text": "test",
-    "createdAt": "2025-04-16T14:38:51.061Z",
-    "replies": [],
-    "reactions": {}
-  },
-  {
-    "id": "temp-id",
-    "text": "dsagfsa",
-    "createdAt": "2025-04-16T14:39:28.003Z",
+    "text": "Test comment 2",
+    "createdAt": "2025-04-16T16:42:02.254Z",
     "replies": [],
     "reactions": {}
   }
